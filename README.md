@@ -14,11 +14,11 @@
 ## Shadcn Library
 
 -  npx shadcn-ui@latest init
-   --- will generate some packages (clsx, class-variance-authority, @radix-ui/react-icons, tailwind-merge, tailwindcss-animate)
+   -  will generate some packages (clsx, class-variance-authority, @radix-ui/react-icons, tailwind-merge, tailwindcss-animate)
 -  npx shadcn-ui@latest add [component]
-   --- axample button, automatically add `@radix-ui/react-slot` package
-   --- card `not adding package`
-   --- form `react-hook-form, zod, @hookform/resolvers` package
+   -  example button, automatically add `@radix-ui/react-slot` package
+   -  card `not adding package`
+   -  form `react-hook-form, zod, @hookform/resolvers` package
 
 ## General Library
 
