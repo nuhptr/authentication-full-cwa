@@ -23,9 +23,10 @@
 -  npx shadcn-ui@latest add [component]
 
 ```text
--  example button, automatically add `@radix-ui/react-slot` package
--  card `not adding package`
--  form `react-hook-form, zod, @hookform/resolvers` package
+- example button, automatically add `@radix-ui/react-slot` package
+- card `not adding package`
+- form `react-hook-form, zod, @hookform/resolvers, @radix-ui/react-label` package
+- input `-nothing adding` package
 ```
 
 ## General Library
