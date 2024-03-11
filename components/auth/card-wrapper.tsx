@@ -6,34 +6,34 @@ import { Social } from "@/components/auth/social"
 import { BackButton } from "@/components/auth/back-button"
 
 type CardWrapperProps = {
-   children: React.ReactNode
-   headerLabel: string
-   backButtonLabel: string
-   backButtonHref: string
-   showSocial?: boolean
+    children: React.ReactNode
+    headerLabel: string
+    backButtonLabel: string
+    backButtonHref: string
+    showSocial?: boolean
 }
 
 export const CardWrapper = ({
-   children,
-   headerLabel,
-   backButtonHref,
-   backButtonLabel,
-   showSocial,
+    children,
+    headerLabel,
+    backButtonHref,
+    backButtonLabel,
+    showSocial,
 }: CardWrapperProps) => {
-   return (
-      <Card className="w-[400px] shadow-md">
-         <CardHeader>
-            <Header label={headerLabel} />
-         </CardHeader>
-         <CardContent>{children}</CardContent>
-         {showSocial && (
+    return (
+        <Card className="w-[400px] shadow-md">
+            <CardHeader>
+                <Header label={headerLabel} />
+            </CardHeader>
+            <CardContent>{children}</CardContent>
+            {showSocial && (
+                <CardFooter>
+                    <Social />
+                </CardFooter>
+            )}
             <CardFooter>
-               <Social />
+                <BackButton href={backButtonHref} label={backButtonLabel} />
             </CardFooter>
-         )}
-         <CardFooter>
-            <BackButton href={backButtonHref} label={backButtonLabel} />
-         </CardFooter>
-      </Card>
-   )
+        </Card>
+    )
 }
