@@ -2,25 +2,25 @@
 
 ## Features
 
--  [x] Login
--  [x] Register
--  [x] Forgot Password
--  [x] Reset Password
--  [x] Change Profile Data
--  [x] Github OAuth
--  [x] Google OAuth
--  [x] Email Verification
+-   [x] Login
+-   [x] Register
+-   [x] Forgot Password
+-   [x] Reset Password
+-   [x] Change Profile Data
+-   [x] Github OAuth
+-   [x] Google OAuth
+-   [x] Email Verification
 
 ## Shadcn Library
 
--  npx shadcn-ui@latest init
+-   npx shadcn-ui@latest init
 
 ```text
    will generate some packages
    (clsx, class-variance-authority, @radix-ui/react-icons, tailwind-merge, tailwindcss-animate)
 ```
 
--  npx shadcn-ui@latest add [component]
+-   npx shadcn-ui@latest add [component]
 
 ```text
 - example button, automatically add `@radix-ui/react-slot` package
@@ -31,4 +31,4 @@
 
 ## General Library
 
--  [react-icons] - pnpm add react-icons (https://react-icons.github.io/react-icons/)
+-   [react-icons] - pnpm add react-icons (https://react-icons.github.io/react-icons/)
