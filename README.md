@@ -15,13 +15,14 @@
 
 -  npx shadcn-ui@latest init
 
-```json
-   will generate some packages (clsx, class-variance-authority, @radix-ui/react-icons, tailwind-merge, tailwindcss-animate)
+```text
+   will generate some packages
+   (clsx, class-variance-authority, @radix-ui/react-icons, tailwind-merge, tailwindcss-animate)
 ```
 
 -  npx shadcn-ui@latest add [component]
 
-```json
+```text
 -  example button, automatically add `@radix-ui/react-slot` package
 -  card `not adding package`
 -  form `react-hook-form, zod, @hookform/resolvers` package
