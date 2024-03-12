@@ -39,10 +39,10 @@
 - npx prisma init
 - create db in neon `https://console.neon.tech/app/welcome`
 - add .env file and add DATABASE_URL
-- npx prisma generate
-- npx prisma db push
+- "db": "npx prisma generate && npx prisma db push" in package.json
 ```
 
 ## General Library
 
 -   [react-icons] - pnpm add react-icons (https://react-icons.github.io/react-icons/)
+-   [bcrypt] - pnpm add bcrypt (https://www.npmjs.com/package/bcrypt)
