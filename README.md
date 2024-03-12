@@ -46,3 +46,4 @@
 
 -   [react-icons] - pnpm add react-icons (https://react-icons.github.io/react-icons/)
 -   [bcrypt] - pnpm add bcrypt (https://www.npmjs.com/package/bcrypt)
+-   [@types/bcrypt] - pnpm add -D @types/bcrypt (https://www.npmjs.com/package/@types/bcrypt)
