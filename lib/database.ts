@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client/extension"
+import { PrismaClient } from "@prisma/client"
 
 //* Extend the global object to include `prisma`
 declare global {
