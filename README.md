@@ -29,21 +29,24 @@
 - input `-nothing adding` package
 ```
 
-## DB Library
+## DB Library & Auth Library
 
 -   [prisma] - pnpm add -D prisma, add @prisma/client (https://www.prisma.io/)
 -   [@auth/prisma-adapter] - pnpm add @auth/prisma-adapter (https://www.npmjs.com/package/@auth/prisma-adapter)
+-   [next-auth] v5 beta - pnpm add next-auth@beta (https://authjs.dev/)
 
 ```text
 - create db.ts and add prisma client ("./lib/db.ts")
 - npx prisma init
 - create db in neon `https://console.neon.tech/app/welcome`
 - add .env file and add DATABASE_URL
-- "db": "npx prisma generate && npx prisma db push" in package.json
+- "db:generate": "npx prisma generate",
+- "db:migrate": "npx prisma migrate dev"
 ```
 
 ## General Library
 
 -   [react-icons] - pnpm add react-icons (https://react-icons.github.io/react-icons/)
--   [bcrypt] - pnpm add bcrypt (https://www.npmjs.com/package/bcrypt)
--   [@types/bcrypt] - pnpm add -D @types/bcrypt (https://www.npmjs.com/package/@types/bcrypt)
+-   [bcryptjs] - pnpm add bcryptjs (https://www.npmjs.com/package/bcryptjs)
+-   [@types/bcryptjs] - pnpm add -D @types/bcryptjs (https://www.npmjs.com/package/@types/bcryptjs)
+-   [winston] - pnpm add winston (https://www.npmjs.com/package/winston)
