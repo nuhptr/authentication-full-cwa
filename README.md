@@ -34,6 +34,11 @@
 -   [prisma] - pnpm add -D prisma, add @prisma/client (https://www.prisma.io/)
 -   [@auth/prisma-adapter] - pnpm add @auth/prisma-adapter (https://www.npmjs.com/package/@auth/prisma-adapter)
 -   [next-auth] v5 beta - pnpm add next-auth@beta (https://authjs.dev/)
+    ```text
+    - npx auth secret (to generate auth secret)
+    - create middleware.ts, auth.ts, and auth.config.ts (root folder)
+    - create route.ts (root folder)
+    ```
 
 ```text
 - create db.ts and add prisma client ("./lib/db.ts")
