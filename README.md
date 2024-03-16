@@ -11,6 +11,11 @@
 -   [x] Google OAuth
 -   [x] Email Verification
 
+## Auth Important Links
+
+-   callbackUrl: http://localhost:3000/api/auth/callback/[provider]
+-   signinUrl: http://localhost:3000/api/auth/signin/[provider]
+
 ## Shadcn Library
 
 -   npx shadcn-ui@latest init
@@ -31,7 +36,7 @@
 
 ## DB Library & Auth Library
 
--   [prisma] - pnpm add -D prisma, add @prisma/client (https://www.prisma.io/)
+-   [prisma] - pnpm add -D prisma@latest, add @prisma/client@latest (https://www.prisma.io/)
 -   [@auth/prisma-adapter] - pnpm add @auth/prisma-adapter (https://www.npmjs.com/package/@auth/prisma-adapter)
 -   [next-auth] v5 beta - pnpm add next-auth@beta (https://authjs.dev/)
     ```text
