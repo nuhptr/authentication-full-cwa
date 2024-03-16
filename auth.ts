@@ -15,7 +15,7 @@ export const {
     callbacks: {
         async session({ token, session }) {
             if (token.sub && session.user) {
-                session.user.id = token.sub
+                session.user.id = token.sub // token.sub is the user id
             }
 
             if (token.role && session.user) {
