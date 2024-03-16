@@ -35,10 +35,12 @@ export const LoginForm = () => {
 
         startTransition(() => {
             login(values).then((data) => {
-                setError(data.errors)
+                setError(data.error)
                 setSuccess(data.success)
             })
         })
+
+        form.reset()
     }
 
     return (

@@ -36,10 +36,12 @@ export const RegisterForm = () => {
 
         startTransition(() => {
             register(values).then((data) => {
-                setError(data.errors)
+                setError(data.error)
                 setSuccess(data.success)
             })
         })
+
+        form.reset()
     }
 
     return (
