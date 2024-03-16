@@ -1,5 +1,4 @@
 import { db } from "@/lib/database"
-import { logger } from "@/lib/logging"
 
 //? This function is used to get a user by their email
 export const getUserByEmail = async (email: string) => {
@@ -8,7 +7,7 @@ export const getUserByEmail = async (email: string) => {
 
         return user
     } catch (error) {
-        return logger.error(error)
+        return null
     }
 }
 
@@ -19,6 +18,6 @@ export const getUserById = async (id: string) => {
 
         return user
     } catch (error) {
-        logger.error(error)
+        return null
     }
 }
