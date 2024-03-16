@@ -12,7 +12,7 @@ import { logger } from "@/lib/logging"
 export const register = async (values: z.infer<typeof RegisterModel>) => {
     const validateFields = RegisterModel.safeParse(values)
     if (!validateFields.success) {
-        return { errors: "Invalid fields!" }
+        return { error: "Invalid fields!" }
     }
 
     const { email, password, name } = validateFields.data
@@ -20,7 +20,7 @@ export const register = async (values: z.infer<typeof RegisterModel>) => {
 
     const existingUser = await getUserByEmail(email)
     if (existingUser) {
-        return { errors: "User already exists!" }
+        return { error: "User already exists!" }
     }
 
     const response = await db.user.create({
