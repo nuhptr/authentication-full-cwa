@@ -20,8 +20,6 @@ export const login = async (values: z.infer<typeof LoginModel>) => {
             password,
             redirectTo: DEFAULT_LOGIN_REDIRECT,
         })
-
-        return { success: "Email sent!" }
     } catch (error) {
         if (error instanceof AuthError) {
             switch (error.type) {
