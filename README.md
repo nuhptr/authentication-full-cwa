@@ -16,6 +16,15 @@
 -   callbackUrl: http://localhost:3000/api/auth/callback/[provider]
 -   signinUrl: http://localhost:3000/api/auth/signin/[provider]
 
+## Google OAuth
+
+-   [Google Console](https://console.developers.google.com/)
+-   open console, create project, and go to OAuth consent screen, create app-name, and add email, and save
+-   go to credentials, create credentials, OAuth client ID, web application
+-   add http://localhost:3000 to authorized javascript origins
+-   add http://localhost:3000/api/auth/callback/google to authorized redirect URIs
+-   copy client id and client secret
+
 ## Shadcn Library
 
 -   npx shadcn-ui@latest init
@@ -52,6 +61,8 @@
 - add .env file and add DATABASE_URL
 - "db:generate": "npx prisma generate",
 - "db:migrate": "npx prisma migrate dev"
+if needed
+- "db:studio": "npx prisma studio"
 ```
 
 ## General Library
