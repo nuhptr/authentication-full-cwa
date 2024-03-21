@@ -12,6 +12,21 @@ export const {
     signIn,
     signOut,
 } = NextAuth({
+    // pages are used to override the default pages
+    pages: {
+        signIn: "/auth/login",
+        error: "/auth/error",
+    },
+    // events are used to run code on specific events as example linkAccount
+    events: {
+        async linkAccount({ user }) {
+            await db.user.update({
+                where: { id: user.id },
+                data: { emailVerified: new Date() },
+            })
+        },
+    },
+    //* callbacks are used to modify the session and jwt tokens
     callbacks: {
         async session({ token, session }) {
             if (token.sub && session.user) {
