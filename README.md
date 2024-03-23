@@ -25,7 +25,7 @@
 -   add http://localhost:3000/api/auth/callback/google to authorized redirect URIs
 -   copy client id and client secret
 
-## Shadcn Library
+## Shadcn package
 
 -   npx shadcn-ui@latest init
 
@@ -43,7 +43,7 @@
 - input `-nothing adding` package
 ```
 
-## DB Library & Auth Library
+## DB package & Auth package
 
 -   [prisma] - pnpm add -D prisma@latest, add @prisma/client@latest (https://www.prisma.io/)
 -   [@auth/prisma-adapter] - pnpm add @auth/prisma-adapter (https://www.npmjs.com/package/@auth/prisma-adapter)
@@ -65,9 +65,19 @@ if needed
 - "db:studio": "npx prisma studio"
 ```
 
-## General Library
+## Resend Package Email
+
+-   create a new account in Resend using email
+-   open docs and choose nextjs quick start
+-   install `Resend package` in the project (pnpm add resend)
+-   create mail.ts in lib folder and add the following code
+
+## General Packages
 
 -   [react-icons] - pnpm add react-icons (https://react-icons.github.io/react-icons/)
 -   [bcryptjs] - pnpm add bcryptjs (https://www.npmjs.com/package/bcryptjs)
 -   [@types/bcryptjs] - pnpm add -D @types/bcryptjs (https://www.npmjs.com/package/@types/bcryptjs)
 -   [winston] - pnpm add winston (https://www.npmjs.com/package/winston)
+-   [uuid] - pnpm add uuid (https://www.npmjs.com/package/uuid)
+-   [@types/uuid] - pnpm add -D @types/uuid (https://www.npmjs.com/package/@types/uuid)
+-   [react-spinners] - pnpm add react-spinners (https://www.npmjs.com/package/react-spinners)
