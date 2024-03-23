@@ -28,6 +28,18 @@ export const {
     },
     //* callbacks are used to modify the session and jwt tokens
     callbacks: {
+        async signIn({ user, account }) {
+            console.log({ user, account })
+            // allow OAuth without email verification
+            if (account?.provider !== "credentials") return true
+
+            const existingUser = await getUserById(user.id!)
+
+            // prevent sign in without email verification
+            if (!existingUser?.emailVerified) return false
+
+            return true
+        },
         async session({ token, session }) {
             if (token.sub && session.user) {
                 session.user.id = token.sub // token.sub is the user id
@@ -43,7 +55,11 @@ export const {
             if (!token.sub) return token
 
             const existingUser = await getUserById(token.sub) // token.sub is the user id
-            if (!existingUser) return token
+
+            if (!existingUser) {
+                return token
+            }
+
             token.role = existingUser.role
 
             return token
