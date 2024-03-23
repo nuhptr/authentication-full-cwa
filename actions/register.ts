@@ -5,6 +5,8 @@ import bcrypt from "bcryptjs"
 
 import { RegisterModel } from "@/model"
 import { getUserByEmail } from "@/data/user"
+import { sendVerificationEmail } from "@/lib/mail"
+import { generateVerificationToken } from "@/data/tokens"
 
 import { db } from "@/lib/database"
 import { logger } from "@/lib/logging"
@@ -33,7 +35,8 @@ export const register = async (values: z.infer<typeof RegisterModel>) => {
 
     logger.info(`data: ${JSON.stringify(response)}`)
 
-    // TODO: Send verification email
+    const verificationToken = await generateVerificationToken(email)
+    await sendVerificationEmail(verificationToken.email, verificationToken.token)
 
-    return { success: "Email sent!" }
+    return { success: "Confirmation email sent!" }
 }
