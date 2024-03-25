@@ -6,7 +6,14 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 import { Input } from "@/components/ui/input"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 
 import { CardWrapper } from "@/components/auth"
@@ -74,7 +81,11 @@ export const RegisterForm = () => {
                                 <FormItem>
                                     <FormLabel htmlFor="email">Email</FormLabel>
                                     <FormControl>
-                                        <Input {...field} placeholder="jhondoe@example.com" type="email" />
+                                        <Input
+                                            {...field}
+                                            placeholder="jhondoe@example.com"
+                                            type="email"
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
