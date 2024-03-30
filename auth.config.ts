@@ -5,7 +5,7 @@ import bcryptjs from "bcryptjs"
 import github from "next-auth/providers/github"
 import google from "next-auth/providers/google"
 
-import { LoginModel } from "@/model"
+import { LoginModel } from "@/model/auth-model"
 import { getUserByEmail } from "@/data/user"
 
 export default {
@@ -26,9 +26,11 @@ export default {
                     const { email, password } = validateFields.data
 
                     const user = await getUserByEmail(email)
+
                     if (!user || !user.password) return null
 
                     const passwordMatch = await bcryptjs.compare(password, user.password)
+
                     if (passwordMatch) return user
                 }
 
