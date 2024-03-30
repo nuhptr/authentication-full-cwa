@@ -6,6 +6,7 @@ import { DEFAULT_LOGIN_REDIRECT, apiAuthPrefix, authRoutes, publicRoutes } from 
 const { auth } = NextAuth(authConfig)
 
 export default auth((req) => {
+    //? main middleware function
     const { nextUrl } = req
     const isLoggedIn = !!req.auth
 
@@ -23,14 +24,27 @@ export default auth((req) => {
     }
 
     if (!isLoggedIn && !isPublicRoute) {
-        return Response.redirect(new URL("/auth/login", nextUrl))
-    }
+        let callbackUrl = nextUrl.pathname
+        //? Add search params to callbackUrl
+        if (nextUrl.search) {
+            callbackUrl += nextUrl.search
+        }
 
-    return
+        const encodedCallbackUrl = encodeURIComponent(callbackUrl)
+
+        return Response.redirect(new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl))
+    }
 })
 
 // Optionally, don't invoke Middleware on some paths
 // Read more: https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
 export const config = {
-    matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+    matcher: [
+        //? Exclude all paths that have a file extension or _next
+        "/((?!.+\\.[\\w]+$|_next).*)",
+        //? exclude paths landing page
+        "/",
+        //? exclude paths that start with /api or /trpc
+        "/(api|trpc)(.*)",
+    ],
 }
