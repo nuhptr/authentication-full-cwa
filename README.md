@@ -37,10 +37,17 @@
 -   npx shadcn-ui@latest add [component]
 
 ```text
-- example button, automatically add `@radix-ui/react-slot` package
-- card `not adding package`
-- form `react-hook-form, zod, @hookform/resolvers, @radix-ui/react-label` package
+- example button, automatically adding `@radix-ui/react-slot` package
+- card `-nothing adding package`
+- form `adding react-hook-form, zod, @hookform/resolvers, @radix-ui/react-label` package
 - input `-nothing adding` package
+- dropdwon-menu `@radix-ui/react-dropdown-menu` package
+- avatar `adding @radix-ui/react-avatar` package
+- badge `-nothing adding` package
+- sooner `adding next-themes & sooner` package
+- switch `adding @radix-ui/react-switch` package
+- select `adding @radix-ui/react-select` package
+- dialog `adding @radix-ui/react-dialog` package
 ```
 
 ## DB package & Auth package
@@ -49,9 +56,23 @@
 -   [@auth/prisma-adapter] - pnpm add @auth/prisma-adapter (https://www.npmjs.com/package/@auth/prisma-adapter)
 -   [next-auth] v5 beta - pnpm add next-auth@beta (https://authjs.dev/)
     ```text
-    - npx auth secret (to generate auth secret)
+    - npx auth secret (to generate auth secret) => add to .env file (AUTH_SECRET)
     - create middleware.ts, auth.ts, and auth.config.ts (root folder)
-    - create route.ts (root folder)
+    - create routes.ts (root folder) for auth routes and public routes
+    ```
+-   ```ts
+    // layout.tsx (root folder)
+    import { auth } from "@/auth"
+
+    const session = await auth()
+
+    return (
+        <SessionProvider session={session}>
+            <html lang="en">
+                <body className={inter.className}>{children}</body>
+            </html>
+        </SessionProvider>
+    )
     ```
 
 ```text
@@ -59,9 +80,10 @@
 - npx prisma init
 - create db in neon `https://console.neon.tech/app/welcome`
 - add .env file and add DATABASE_URL
+- add scripts in package.json ("postinstall": "prisma generate",)
 - "db:generate": "npx prisma generate",
 - "db:migrate": "npx prisma migrate dev"
-if needed
+---if needed
 - "db:studio": "npx prisma studio"
 ```
 
@@ -81,3 +103,4 @@ if needed
 -   [uuid] - pnpm add uuid (https://www.npmjs.com/package/uuid)
 -   [@types/uuid] - pnpm add -D @types/uuid (https://www.npmjs.com/package/@types/uuid)
 -   [react-spinners] - pnpm add react-spinners (https://www.npmjs.com/package/react-spinners)
+-   [crypto] - pnpm add crypto (https://nodejs.org/api/crypto.html) // built-in package, no need to install
