@@ -1,9 +1,5 @@
-import React from "react"
+import { LoginForm } from "@/app/auth/login/login-form"
 
-import { LoginForm } from "@/components/auth"
-
-const LoginPage = () => {
+export default function LoginPage() {
     return <LoginForm />
 }
-
-export default LoginPage
