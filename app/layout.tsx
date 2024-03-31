@@ -10,7 +10,7 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-    title: "Complete Auth | Code With Antonio",
+    title: "Complete Auth | Full Authentication Guide for Next.js",
     description: "Learn how to add authentication to your Next.js app with this complete guide.",
 }
 
