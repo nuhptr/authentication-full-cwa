@@ -2,9 +2,9 @@
 
 import { db } from "@/lib/database"
 import { getUserByEmail } from "@/data/user"
-import { getVerificationTokenByEmail, getVerificationTokenByToken } from "@/data/verification-token"
+import { getVerificationTokenByToken } from "@/data/verification-token"
 
-export const newVerification = async (token: string) => {
+export async function newVerification(token: string) {
     const existingToken = await getVerificationTokenByToken(token)
 
     if (!existingToken) {
