@@ -11,13 +11,13 @@ type CardWrapperProps = {
     showSocial?: boolean
 }
 
-export const CardWrapper = ({
+export function CardWrapper({
     children,
     headerLabel,
     backButtonHref,
     backButtonLabel,
     showSocial,
-}: CardWrapperProps) => {
+}: CardWrapperProps) {
     return (
         <Card className="w-[400px] shadow-md">
             <CardHeader>
