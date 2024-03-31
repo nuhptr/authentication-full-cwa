@@ -1,7 +1,11 @@
 import { db } from "@/lib/database"
 
-//? This function is used to get a user by their email
-export const getUserByEmail = async (email: string) => {
+/**
+ * Action to get user data using email registered
+ * @param email string
+ * @returns user
+ */
+export async function getUserByEmail(email: string) {
     try {
         const user = await db.user.findUnique({ where: { email } })
 
@@ -11,8 +15,12 @@ export const getUserByEmail = async (email: string) => {
     }
 }
 
-//? This function is used to get a user by their id
-export const getUserById = async (id: string) => {
+/**
+ * Action to get user data by using id
+ * @param id string
+ * @returns user
+ */
+export async function getUserById(id: string) {
     try {
         const user = await db.user.findUnique({ where: { id } })
 
