@@ -1,5 +1,9 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import { SessionProvider } from "next-auth/react"
+
+import { auth } from "@/auth"
+import { Toaster } from "@/components/ui/sonner"
 
 import "./globals.css"
 
@@ -10,12 +14,19 @@ export const metadata: Metadata = {
     description: "Learn how to add authentication to your Next.js app with this complete guide.",
 }
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+    const session = await auth()
+
     return (
-        <html lang="en">
-            <body className={inter.className} suppressHydrationWarning={true}>
-                {children}
-            </body>
-        </html>
+        //? The `SessionProvider` is a wrapper that provides a session to all components in tree
+        <SessionProvider session={session}>
+            <html lang="en">
+                <body className={inter.className}>
+                    {/* to enable toast in app */}
+                    <Toaster />
+                    {children}
+                </body>
+            </html>
+        </SessionProvider>
     )
 }
