@@ -1,5 +1,7 @@
 # Learn Authentication Complete Features
 
+<img width="1440" alt="next-auth" src="https://github.com/nuhptr/authentication-full-cwa/assets/50306963/f0b1aa94-e278-481a-bd31-cc3c9a46ddc1">
+
 ## Features
 
 -   [x] Login
