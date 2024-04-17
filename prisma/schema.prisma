@@ -20,13 +20,14 @@ enum UserRole {
 
 // model user
 model User {
-  id                    String                 @id @default(cuid())
-  name                  String?
-  email                 String?                @unique
-  emailVerified         DateTime?
-  image                 String?
-  password              String?
-  isTwoFactorEnabled    Boolean                @default(false)
+  id                 String    @id @default(cuid())
+  name               String?
+  email              String?   @unique
+  emailVerified      DateTime?
+  image              String?
+  password           String?
+  isTwoFactorEnabled Boolean   @default(false)
+
   twoFactorConfirmation TwoFactorConfirmation?
 
   role UserRole @default(USER)
