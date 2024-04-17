@@ -10,47 +10,47 @@ import { FormError } from "@/components/form-error"
 import { FormSuccess } from "@/components/form-success"
 
 export function NewVerificationForm() {
-    const [error, setError] = useState<string | undefined>()
-    const [success, setSuccess] = useState<string | undefined>()
+   const [error, setError] = useState<string | undefined>()
+   const [success, setSuccess] = useState<string | undefined>()
 
-    const searchParams = useSearchParams()
+   const searchParams = useSearchParams()
 
-    const token = searchParams.get("token")
+   const token = searchParams.get("token")
 
-    const onSubmit = useCallback(() => {
-        // If success or error, don't do anything
-        if (success || error) return
+   const onSubmit = useCallback(() => {
+      // If success or error, don't do anything
+      if (success || error) return
 
-        if (!token) {
-            setError("Missing token!")
-            return
-        }
+      if (!token) {
+         setError("Missing token!")
+         return
+      }
 
-        // console.log(token)
-        newVerification(token)
-            .then((data) => {
-                setSuccess(data.success)
-                setError(data.error)
-            })
-            .catch(() => {
-                setError("Something went wrong!")
-            })
-    }, [error, success, token])
+      // console.log(token)
+      newVerification(token)
+         .then((data) => {
+            setSuccess(data.success)
+            setError(data.error)
+         })
+         .catch(() => {
+            setError("Something went wrong!")
+         })
+   }, [error, success, token])
 
-    useEffect(() => {
-        onSubmit()
-    }, [onSubmit])
+   useEffect(() => {
+      onSubmit()
+   }, [onSubmit])
 
-    return (
-        <CardWrapper
-            headerLabel="Confirming your verification"
-            backButtonLabel="Back to login"
-            backButtonHref="/auth/login">
-            <div className="flex items-center justify-center w-full">
-                {!success && !error && <BeatLoader />}
-                <FormSuccess message={success} />
-                {!success && <FormError message={error} />}
-            </div>
-        </CardWrapper>
-    )
+   return (
+      <CardWrapper
+         headerLabel="Confirming your verification"
+         backButtonLabel="Back to login"
+         backButtonHref="/auth/login">
+         <div className="flex items-center justify-center w-full">
+            {!success && !error && <BeatLoader />}
+            <FormSuccess message={success} />
+            {!success && <FormError message={error} />}
+         </div>
+      </CardWrapper>
+   )
 }

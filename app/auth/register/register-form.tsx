@@ -7,12 +7,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 
 import { Input } from "@/components/ui/input"
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+   Form,
+   FormControl,
+   FormField,
+   FormItem,
+   FormLabel,
+   FormMessage,
 } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 
@@ -24,95 +24,92 @@ import { RegisterModel } from "@/model/auth-model"
 import { register } from "@/actions/register"
 
 export function RegisterForm() {
-    const [error, setError] = useState<string | undefined>("")
-    const [success, setSuccess] = useState<string | undefined>("")
-    const [isPending, startTransition] = useTransition()
+   const [error, setError] = useState<string | undefined>("")
+   const [success, setSuccess] = useState<string | undefined>("")
+   const [isPending, startTransition] = useTransition()
 
-    const form = useForm<z.infer<typeof RegisterModel>>({
-        resolver: zodResolver(RegisterModel),
-        defaultValues: { name: "", email: "", password: "" },
-    })
+   const form = useForm<z.infer<typeof RegisterModel>>({
+      resolver: zodResolver(RegisterModel),
+      defaultValues: { name: "", email: "", password: "" },
+   })
 
-    const onSubmit = (values: z.infer<typeof RegisterModel>) => {
-        setError("")
-        setSuccess("")
+   const onSubmit = (values: z.infer<typeof RegisterModel>) => {
+      setError("")
+      setSuccess("")
 
-        startTransition(() => {
-            register(values).then((data) => {
-                if (data?.error) {
-                    form.reset()
-                    setError(data.error)
-                }
+      startTransition(() => {
+         register(values).then((data) => {
+            if (data?.error) {
+               form.reset()
+               setError(data.error)
+            }
 
-                if (data?.success) {
-                    form.reset()
-                    setSuccess(data.success)
-                }
-            })
-        })
-    }
+            if (data?.success) {
+               form.reset()
+               setSuccess(data.success)
+            }
+         })
+      })
+   }
 
-    return (
-        <CardWrapper
-            headerLabel="Create an account"
-            backButtonLabel="Already have an account?"
-            backButtonHref="/auth/login"
-            showSocial>
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    <div className="space-y-4">
-                        <FormField
-                            control={form.control}
-                            name="name"
-                            disabled={isPending}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="name">Name</FormLabel>
-                                    <FormControl>
-                                        <Input {...field} placeholder="Jhon doe" type="text" />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="email"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="email">Email</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            placeholder="jhondoe@example.com"
-                                            type="email"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="password"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="password">Password</FormLabel>
-                                    <FormControl>
-                                        <Input {...field} placeholder="*******" type="password" />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    <FormError message={error} />
-                    <FormSuccess message={success} />
-                    <Button type="submit" className="w-full" disabled={isPending}>
-                        Create an account
-                    </Button>
-                </form>
-            </Form>
-        </CardWrapper>
-    )
+   return (
+      <CardWrapper
+         headerLabel="Create an account"
+         backButtonLabel="Already have an account?"
+         backButtonHref="/auth/login"
+         showSocial>
+         <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+               <div className="space-y-4">
+                  <FormField
+                     control={form.control}
+                     name="name"
+                     disabled={isPending}
+                     render={({ field }) => (
+                        <FormItem>
+                           <FormLabel htmlFor="name">Name</FormLabel>
+                           <FormControl>
+                              <Input {...field} placeholder="Jhon doe" type="text" />
+                           </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
+                  <FormField
+                     control={form.control}
+                     name="email"
+                     render={({ field }) => (
+                        <FormItem>
+                           <FormLabel htmlFor="email">Email</FormLabel>
+                           <FormControl>
+                              <Input {...field} placeholder="jhondoe@example.com" type="email" />
+                           </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
+                  <FormField
+                     control={form.control}
+                     name="password"
+                     render={({ field }) => (
+                        <FormItem>
+                           <FormLabel htmlFor="password">Password</FormLabel>
+                           <FormControl>
+                              <Input {...field} placeholder="*******" type="password" />
+                           </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
+               </div>
+
+               <FormError message={error} />
+               <FormSuccess message={success} />
+               <Button type="submit" className="w-full" disabled={isPending}>
+                  Create an account
+               </Button>
+            </form>
+         </Form>
+      </CardWrapper>
+   )
 }
