@@ -6,45 +6,43 @@ import { DEFAULT_LOGIN_REDIRECT, apiAuthPrefix, authRoutes, publicRoutes } from 
 const { auth } = NextAuth(authConfig)
 
 export default auth((req) => {
-    //? main middleware function
-    const { nextUrl } = req
-    const isLoggedIn = !!req.auth
+   //? main middleware function
+   const { nextUrl } = req
+   const isLoggedIn = !!req.auth
 
-    const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix)
-    const isPublicRoute = publicRoutes.includes(nextUrl.pathname)
-    const isAuthRoute = authRoutes.includes(nextUrl.pathname)
+   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix)
+   const isPublicRoute = publicRoutes.includes(nextUrl.pathname)
+   const isAuthRoute = authRoutes.includes(nextUrl.pathname)
 
-    if (isApiAuthRoute) {
-        return
-    }
+   if (isApiAuthRoute) return
 
-    if (isAuthRoute) {
-        if (isLoggedIn) return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
-        return
-    }
+   if (isAuthRoute) {
+      if (isLoggedIn) return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
+      return
+   }
 
-    if (!isLoggedIn && !isPublicRoute) {
-        let callbackUrl = nextUrl.pathname
-        //? Add search params to callbackUrl
-        if (nextUrl.search) {
-            callbackUrl += nextUrl.search
-        }
+   if (!isLoggedIn && !isPublicRoute) {
+      let callbackUrl = nextUrl.pathname
+      //? Add search params to callbackUrl
+      if (nextUrl.search) {
+         callbackUrl += nextUrl.search
+      }
 
-        const encodedCallbackUrl = encodeURIComponent(callbackUrl)
+      const encodedCallbackUrl = encodeURIComponent(callbackUrl)
 
-        return Response.redirect(new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl))
-    }
+      return Response.redirect(new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl))
+   }
 })
 
 // Optionally, don't invoke Middleware on some paths
 // Read more: https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
 export const config = {
-    matcher: [
-        //? Exclude all paths that have a file extension or _next
-        "/((?!.+\\.[\\w]+$|_next).*)",
-        //? exclude paths landing page
-        "/",
-        //? exclude paths that start with /api or /trpc
-        "/(api|trpc)(.*)",
-    ],
+   matcher: [
+      //? Exclude all paths that have a file extension or _next
+      "/((?!.+\\.[\\w]+$|_next).*)",
+      //? exclude paths landing page
+      "/",
+      //? exclude paths that start with /api or /trpc
+      "/(api|trpc)(.*)",
+   ],
 }
