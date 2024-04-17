@@ -2,18 +2,18 @@
 
 import { logout } from "@/actions/logout"
 
-type LogoutButtonProps = {
-    children?: React.ReactNode
+interface LogoutButtonProps {
+   children?: React.ReactNode
 }
 
 export function LogoutButton({ children }: LogoutButtonProps) {
-    function onClick() {
-        logout()
-    }
+   function onClick() {
+      logout()
+   }
 
-    return (
-        <span className="cursor-pointer" onClick={onClick}>
-            {children}
-        </span>
-    )
+   return (
+      <span className="cursor-pointer" onClick={onClick}>
+         {children}
+      </span>
+   )
 }
