@@ -6,13 +6,13 @@ import { db } from "@/lib/database"
  * @returns user
  */
 export async function getUserByEmail(email: string) {
-    try {
-        const user = await db.user.findUnique({ where: { email } })
+   try {
+      const user = await db.user.findUnique({ where: { email } })
 
-        return user
-    } catch (error) {
-        return null
-    }
+      return user
+   } catch (error) {
+      return null
+   }
 }
 
 /**
@@ -21,11 +21,11 @@ export async function getUserByEmail(email: string) {
  * @returns user
  */
 export async function getUserById(id: string) {
-    try {
-        const user = await db.user.findUnique({ where: { id } })
+   try {
+      const user = await db.user.findUnique({ where: { id } })
 
-        return user
-    } catch (error) {
-        return null
-    }
+      return user
+   } catch (error) {
+      return null
+   }
 }

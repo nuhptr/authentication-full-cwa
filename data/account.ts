@@ -7,13 +7,11 @@ import { db } from "@/lib/database"
  * scope, id_token, session_state, provider, providerAccountId, userId }
  */
 export async function getAccountByUserId(userId: string) {
-    try {
-        const account = await db.account.findFirst({
-            where: { userId },
-        })
+   try {
+      const account = await db.account.findFirst({ where: { userId } })
 
-        return account
-    } catch (error) {
-        return null
-    }
+      return account
+   } catch (error) {
+      return null
+   }
 }

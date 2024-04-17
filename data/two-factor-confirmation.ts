@@ -6,13 +6,11 @@ import { db } from "@/lib/database"
  * @returns twoFactorConfirmation {id, expires, userId}
  */
 export async function getTwoFactorConfirmationByUserId(userId: string) {
-    try {
-        const twoFactorConfirmation = await db.twoFactorConfirmation.findUnique({
-            where: { userId },
-        })
+   try {
+      const twoFactorConfirmation = await db.twoFactorConfirmation.findUnique({ where: { userId } })
 
-        return twoFactorConfirmation
-    } catch (error) {
-        return null
-    }
+      return twoFactorConfirmation
+   } catch (error) {
+      return null
+   }
 }
