@@ -11,30 +11,28 @@ import { sendVerificationEmail } from "@/lib/mail"
 import { db } from "@/lib/database"
 
 export async function register(values: z.infer<typeof RegisterModel>) {
-    const validateFields = RegisterModel.safeParse(values)
+   const validateFields = RegisterModel.safeParse(values)
+   if (!validateFields.success) {
+      return { error: "Invalid fields!" }
+   }
 
-    if (!validateFields.success) {
-        return { error: "Invalid fields!" }
-    }
+   const { email, password, name } = validateFields.data
 
-    const { email, password, name } = validateFields.data
+   const hashedPassword = await bcrypt.hash(password, 10)
 
-    const hashedPassword = await bcrypt.hash(password, 10)
+   const existingUser = await getUserByEmail(email)
+   if (existingUser) {
+      return { error: "User already exists!" }
+   }
 
-    const existingUser = await getUserByEmail(email)
+   const response = await db.user.create({
+      data: { name, email, password: hashedPassword },
+   })
 
-    if (existingUser) {
-        return { error: "User already exists!" }
-    }
+   console.info("User created:", response)
 
-    const response = await db.user.create({
-        data: { name, email, password: hashedPassword },
-    })
+   const verificationToken = await generateVerificationToken(email)
+   await sendVerificationEmail(verificationToken.email, verificationToken.token)
 
-    console.info("User created:", response)
-
-    const verificationToken = await generateVerificationToken(email)
-    await sendVerificationEmail(verificationToken.email, verificationToken.token)
-
-    return { success: "Confirmation email sent!" }
+   return { success: "Confirmation email sent!" }
 }

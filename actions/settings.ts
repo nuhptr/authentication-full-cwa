@@ -13,59 +13,55 @@ import { SettingsModel } from "@/model/auth-model"
 import { getUserByEmail, getUserById } from "@/data/user"
 
 export async function settings(values: z.infer<typeof SettingsModel>) {
-    const user = await currentUser()
+   const user = await currentUser()
+   if (!user) return { error: "Unauthorized" }
 
-    if (!user) return { error: "Unauthorized" }
+   const dbUser = await getUserById(user.id!)
+   if (!dbUser) return { error: "User not found" }
 
-    const dbUser = await getUserById(user.id!)
+   if (user.isOAuth) {
+      values.email = undefined
+      values.password = undefined
+      values.newPassword = undefined
+      values.isTwoFactorEnabled = undefined
+   }
 
-    if (!dbUser) return { error: "User not found" }
+   if (values.email && values.email !== user.email) {
+      const existingUser = await getUserByEmail(values.email)
+      if (existingUser && existingUser.id !== user.id) {
+         return { error: "Email already in use" }
+      }
 
-    if (user.isOAuth) {
-        values.email = undefined
-        values.password = undefined
-        values.newPassword = undefined
-        values.isTwoFactorEnabled = undefined
-    }
+      const verificationToken = await generateVerificationToken(values.email)
+      await sendVerificationEmail(verificationToken.email, verificationToken.token)
 
-    if (values.email && values.email !== user.email) {
-        const existingUser = await getUserByEmail(values.email)
+      return { success: "Verification email sent!" }
+   }
 
-        if (existingUser && existingUser.id !== user.id) {
-            return { error: "Email already in use" }
-        }
+   if (values.password && values.newPassword && dbUser.password) {
+      const passwordMatch = await bcrypt.compare(values.password, dbUser.password)
+      if (!passwordMatch) {
+         return { error: "Incorrect password!" }
+      }
 
-        const verificationToken = await generateVerificationToken(values.email)
-        await sendVerificationEmail(verificationToken.email, verificationToken.token)
+      const hashedPassword = await bcrypt.hash(values.newPassword, 10)
+      values.password = hashedPassword
+      values.newPassword = undefined // Remove new password from values (not needed anymore)
+   }
 
-        return { success: "Verification email sent!" }
-    }
+   const updatedUser = await db.user.update({
+      where: { id: dbUser.id },
+      data: { ...values },
+   })
 
-    if (values.password && values.newPassword && dbUser.password) {
-        const passwordMatch = await bcrypt.compare(values.password, dbUser.password)
+   unstable_update({
+      user: {
+         name: updatedUser.name,
+         email: updatedUser.email,
+         isTwoFactorEnabled: updatedUser.isTwoFactorEnabled,
+         role: updatedUser.role,
+      },
+   })
 
-        if (!passwordMatch) {
-            return { error: "Incorrect password!" }
-        }
-
-        const hashedPassword = await bcrypt.hash(values.newPassword, 10)
-        values.password = hashedPassword
-        values.newPassword = undefined // Remove new password from values (not needed anymore)
-    }
-
-    const updatedUser = await db.user.update({
-        where: { id: dbUser.id },
-        data: { ...values },
-    })
-
-    unstable_update({
-        user: {
-            name: updatedUser.name,
-            email: updatedUser.email,
-            isTwoFactorEnabled: updatedUser.isTwoFactorEnabled,
-            role: updatedUser.role,
-        },
-    })
-
-    return { success: "Settings updated" }
+   return { success: "Settings updated" }
 }

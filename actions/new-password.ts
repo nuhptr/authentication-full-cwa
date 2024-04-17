@@ -10,45 +10,42 @@ import { getUserByEmail } from "@/data/user"
 import { db } from "@/lib/database"
 
 export async function newPassword(values: z.infer<typeof NewPasswordModel>, token?: string | null) {
-    if (!token) {
-        return { error: "Missing token!" }
-    }
-    const validateFields = NewPasswordModel.safeParse(values)
+   if (!token) {
+      return { error: "Missing token!" }
+   }
 
-    if (!validateFields.success) {
-        return { error: "Invalid fields!" }
-    }
+   const validateFields = NewPasswordModel.safeParse(values)
+   if (!validateFields.success) {
+      return { error: "Invalid fields!" }
+   }
 
-    const { password } = validateFields.data
+   const { password } = validateFields.data
 
-    const existingToken = await getPasswordResetTokenByToken(token)
+   const existingToken = await getPasswordResetTokenByToken(token)
+   if (!existingToken) {
+      return { error: "Invalid token!" }
+   }
 
-    if (!existingToken) {
-        return { error: "Invalid token!" }
-    }
+   const hasExpired = new Date(existingToken.expires) < new Date()
+   if (hasExpired) {
+      return { error: "Token has expired!" }
+   }
 
-    const hasExpired = new Date(existingToken.expires) < new Date()
+   const existingUser = await getUserByEmail(existingToken.email)
+   if (!existingUser) {
+      return { error: "User not found!" }
+   }
 
-    if (hasExpired) {
-        return { error: "Token has expired!" }
-    }
+   const hashedPassword = await bcrypt.hash(password, 10)
 
-    const existingUser = await getUserByEmail(existingToken.email)
+   await db.user.update({
+      where: { id: existingUser.id },
+      data: { password: hashedPassword },
+   })
 
-    if (!existingUser) {
-        return { error: "User not found!" }
-    }
+   await db.passwordResetToken.delete({
+      where: { id: existingToken.id },
+   })
 
-    const hashedPassword = await bcrypt.hash(password, 10)
-
-    await db.user.update({
-        where: { id: existingUser.id },
-        data: { password: hashedPassword },
-    })
-
-    await db.passwordResetToken.delete({
-        where: { id: existingToken.id },
-    })
-
-    return { success: "Password updated!" }
+   return { success: "Password updated!" }
 }
