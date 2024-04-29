@@ -98,11 +98,11 @@
 
 ## General Packages
 
--  [react-icons] - pnpm add react-icons (https://react-icons.github.io/react-icons/)
--  [bcryptjs] - pnpm add bcryptjs (https://www.npmjs.com/package/bcryptjs)
--  [@types/bcryptjs] - pnpm add -D @types/bcryptjs (https://www.npmjs.com/package/@types/bcryptjs)
--  [winston] - pnpm add winston (https://www.npmjs.com/package/winston)
--  [uuid] - pnpm add uuid (https://www.npmjs.com/package/uuid)
--  [@types/uuid] - pnpm add -D @types/uuid (https://www.npmjs.com/package/@types/uuid)
--  [react-spinners] - pnpm add react-spinners (https://www.npmjs.com/package/react-spinners)
--  [crypto] - pnpm add crypto (https://nodejs.org/api/crypto.html) // built-in package, no need to install
+-  [react-icons] - bun add react-icons (https://react-icons.github.io/react-icons/)
+-  [bcryptjs] - bun add bcryptjs (https://www.npmjs.com/package/bcryptjs)
+-  [@types/bcryptjs] - bun add -D @types/bcryptjs (https://www.npmjs.com/package/@types/bcryptjs)
+-  [winston] - bun add winston (https://www.npmjs.com/package/winston)
+-  [uuid] - bun add uuid (https://www.npmjs.com/package/uuid)
+-  [@types/uuid] - bun add -D @types/uuid (https://www.npmjs.com/package/@types/uuid)
+-  [react-spinners] - bun add react-spinners (https://www.npmjs.com/package/react-spinners)
+-  [crypto] - bun add crypto (https://nodejs.org/api/crypto.html) // built-in package, no need to install
