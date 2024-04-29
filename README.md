@@ -1,6 +1,6 @@
 # Learn Authentication Complete Features
 
-<img width="1440" alt="next-auth" src="https://github.com/nuhptr/authentication-full-cwa/assets/50306963/f0b1aa94-e278-481a-bd31-cc3c9a46ddc1">
+<img width="1440" alt="next-auth" src="https://github.com/nuhptr/authentication-full-cwa/assets/50306963/a08cacc3-4f43-4a18-aafb-381f3f647355">
 
 ## Features
 
@@ -21,11 +21,11 @@
 ## Google OAuth
 
 -  [Google Console](https://console.developers.google.com/)
--  open console, create project, and go to OAuth consent screen, create app-name, and add email, and save
+-  open the console, create a project, go to the OAuth consent screen, create app-name, add email, and save
 -  go to credentials, create credentials, OAuth client ID, web application
 -  add http://localhost:3000 to authorized javascript origins
 -  add http://localhost:3000/api/auth/callback/google to authorized redirect URIs
--  copy client id and client secret
+-  copy client ID and client secret
 
 ## Shadcn package
 
