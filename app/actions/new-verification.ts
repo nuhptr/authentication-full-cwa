@@ -1,29 +1,39 @@
 "use server"
 
-import { prismaDB } from "@/lib/database"
 import { getUserByEmail } from "@/app/data/user"
 import { getVerificationTokenByToken } from "@/app/data/verification-token"
+import { db } from "@/lib/db"
 
 export const newVerification = async (token: string) => {
-   const checkToken = await getVerificationTokenByToken(token)
-   if (!checkToken) return { error: "Token doesn't exist" }
+   const existingToken = await getVerificationTokenByToken(token)
 
-   // Check if token has expired
-   const hasExpired = new Date(checkToken.expires) < new Date()
-   if (hasExpired) return { error: "Token has expired" }
+   if (!existingToken) {
+      return { error: "Token does not exists!" }
+   }
 
-   // Check if user exists
-   const checkUser = await getUserByEmail(checkToken.email)
-   if (!checkUser) return { error: "User not found." }
+   const hasExpired = new Date(existingToken.expires) < new Date()
 
-   // Update user email verification status
-   await prismaDB.user.update({
-      where: { id: checkUser.id },
-      data: { emailVerified: new Date(), email: checkToken.email },
+   if (hasExpired) {
+      return { error: "Token expired!" }
+   }
+
+   const existingUser = await getUserByEmail(existingToken.email)
+
+   if (!existingUser) {
+      return { error: "Email does not exists!" }
+   }
+
+   await db.user.update({
+      where: { id: existingUser.id },
+      data: {
+         emailVerified: new Date(),
+         email: existingToken.email,
+      },
    })
 
-   // Delete token
-   await prismaDB.verificationToken.delete({ where: { id: checkToken.id } })
+   await db.verificationToken.delete({
+      where: { id: existingToken.id },
+   })
 
-   return { success: "Email verified" }
+   return { success: "Email verified!" }
 }

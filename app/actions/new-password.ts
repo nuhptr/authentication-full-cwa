@@ -1,44 +1,57 @@
 "use server"
 
 import * as z from "zod"
-import bcryptjs from "bcryptjs"
+import bcrypt from "bcryptjs"
 
-import { prismaDB } from "@/lib/database"
-
-import { NewPasswordModel } from "../model/auth-model"
-import { getPasswordResetTokenByToken } from "../data/password-reset-token"
-import { getUserByEmail } from "../data/user"
+import { NewPasswordSchema } from "@/model"
+import { getPasswordResetTokenByToken } from "@/app/data/password-reset-token"
+import { getUserByEmail } from "@/app/data/user"
+import { db } from "@/lib/db"
 
 export const newPassword = async (
-   values: z.infer<typeof NewPasswordModel>,
-   token?: string | null
+   values: z.infer<typeof NewPasswordSchema>,
+   token: string | null
 ) => {
-   if (!token) return { error: "Missing token." }
+   if (!token) {
+      return { error: "Missing token!" }
+   }
 
-   const validateFields = NewPasswordModel.safeParse(values)
-   if (!validateFields.success) return { error: "Error in password input, Check it later." }
+   const validateFields = NewPasswordSchema.safeParse(values)
+
+   if (!validateFields.success) {
+      return { error: "Invalid fields!" }
+   }
 
    const { password } = validateFields.data
 
-   // Check if token exists
-   const checkToken = await getPasswordResetTokenByToken(token)
-   if (!checkToken) return { error: "Invalid token." }
+   const existingToken = await getPasswordResetTokenByToken(token)
 
-   // Check if token has expired
-   const hasExpires = new Date(checkToken.expires) < new Date()
-   if (hasExpires) return { error: "Token has expired." }
+   if (!existingToken) {
+      return { error: "Invalid token!" }
+   }
 
-   // Check if user exists
-   const checkUser = await getUserByEmail(checkToken.email)
-   if (!checkUser) return { error: "User not found." }
+   const hasExpired = new Date(existingToken.expires) < new Date()
 
-   const hashedPassword = await bcryptjs.hash(password, 10)
+   if (hasExpired) {
+      return { error: "Token expired!" }
+   }
 
-   // Update user password
-   await prismaDB.user.update({ where: { id: checkToken.id }, data: { password: hashedPassword } })
+   const existingUser = await getUserByEmail(existingToken.email)
 
-   // Delete token
-   await prismaDB.passwordResetToken.delete({ where: { id: checkToken.id } })
+   if (!existingUser) {
+      return { error: "Email not found!" }
+   }
 
-   return { success: "Password updated." }
+   const hashedPassword = await bcrypt.hash(password, 10)
+
+   await db.user.update({
+      where: { id: existingUser.id },
+      data: { password: hashedPassword },
+   })
+
+   await db.passwordResetToken.delete({
+      where: { id: existingToken.id },
+   })
+
+   return { success: "Password updated!" }
 }

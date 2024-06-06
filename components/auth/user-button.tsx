@@ -3,8 +3,6 @@
 import { FaUser } from "react-icons/fa"
 import { ExitIcon } from "@radix-ui/react-icons"
 
-import { useCurrentUser } from "@/app/hooks/use-current-user"
-
 import {
    DropdownMenu,
    DropdownMenuContent,
@@ -12,7 +10,8 @@ import {
    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { LogoutButton } from "@/components/auth/LogoutButton"
+import { useCurrentUser } from "@/app/hooks/use-current-user"
+import { LogoutButton } from "@/components/auth/logout-button"
 
 export const UserButton = () => {
    const user = useCurrentUser()
@@ -21,18 +20,17 @@ export const UserButton = () => {
       <DropdownMenu>
          <DropdownMenuTrigger>
             <Avatar>
-               <AvatarImage src={user?.image || ""}></AvatarImage>
+               <AvatarImage src={user?.image || ""} />
                <AvatarFallback className="bg-sky-500">
                   <FaUser className="text-white" />
                </AvatarFallback>
             </Avatar>
          </DropdownMenuTrigger>
-
          <DropdownMenuContent className="w-40" align="end">
             <LogoutButton>
                <DropdownMenuItem>
-                  <ExitIcon className="w-4 h-4 mr-2" />
-                  Log out
+                  <ExitIcon className="h-4 w-4 mr-2" />
+                  Logout
                </DropdownMenuItem>
             </LogoutButton>
          </DropdownMenuContent>

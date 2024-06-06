@@ -1,35 +1,39 @@
 "use server"
 
 import * as z from "zod"
-import bcryptjs from "bcryptjs"
-
-import { generateVerificationToken } from "@/lib/tokens"
-import { sendVerificationEmail } from "@/lib/mail"
-import { prismaDB } from "@/lib/database"
-
-import { RegisterModel } from "@/app/model/auth-model"
+import bcrypt from "bcryptjs"
+import { db } from "@/lib/db"
+import { RegisterSchema } from "@/model"
 import { getUserByEmail } from "@/app/data/user"
+import { generateVerificationToken } from "@/lib/token"
+import { sendVerificationEmail } from "@/lib/mail"
 
-export const register = async (values: z.infer<typeof RegisterModel>) => {
-   const validateFields = RegisterModel.safeParse(values)
-   if (!validateFields.success) return { error: "Please input correct data." }
+export const register = async (values: z.infer<typeof RegisterSchema>) => {
+   const validatedFields = RegisterSchema.safeParse(values)
 
-   const { email, password, name } = validateFields.data
+   if (!validatedFields.success) {
+      return { error: "Invalid fields" }
+   }
 
-   const hashedPassword = await bcryptjs.hash(password, 10)
+   const { email, password, name } = validatedFields.data
+   const hashedPassword = await bcrypt.hash(password, 10)
 
-   const checkUser = await getUserByEmail(email)
-   if (checkUser && checkUser.email) return { error: "User with the email already exists." }
+   const existingUser = await getUserByEmail(email)
 
-   const response = await prismaDB.user.create({
-      data: { email, name, password: hashedPassword },
+   if (existingUser) {
+      return { error: "Email already in use!" }
+   }
+
+   await db.user.create({
+      data: {
+         name,
+         email,
+         password: hashedPassword,
+      },
    })
 
-   console.info("User created: ", response)
-
-   // After user is created, generate verification token and send email
    const verificationToken = await generateVerificationToken(email)
    await sendVerificationEmail(verificationToken.email, verificationToken.token)
 
-   return { success: "User created successfully. Please verify your email." }
+   return { success: "Confirmation email sent!" }
 }

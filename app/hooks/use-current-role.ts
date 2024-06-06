@@ -1,6 +1,5 @@
-import { useSession } from "next-auth/react" // manual import
+import { useSession } from "next-auth/react"
 
-// For client side rendering
 export const useCurrentRole = () => {
    const session = useSession()
 

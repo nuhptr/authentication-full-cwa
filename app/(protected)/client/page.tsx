@@ -1,13 +1,12 @@
-import { UserInfo } from "@/components/UserInfo"
+"use client"
 
 import { useCurrentUser } from "@/app/hooks/use-current-user"
+import { UserInfo } from "@/components/user-info"
 
-export default async function ClientPage() {
+const ClientPage = () => {
    const user = useCurrentUser()
 
-   return (
-      <div>
-         <UserInfo label="* Client Component" user={user} />
-      </div>
-   )
+   return <UserInfo label="💻 Client component" user={user} />
 }
+
+export default ClientPage

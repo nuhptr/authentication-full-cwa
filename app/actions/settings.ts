@@ -1,25 +1,29 @@
 "use server"
 
 import * as z from "zod"
-import bcryptjs from "bcryptjs"
+import bcrypt from "bcryptjs"
 
-import { prismaDB } from "@/lib/database"
+import { update } from "@/auth"
+import { db } from "@/lib/db"
+import { SettingsSchema } from "@/model"
+import { getUserByEmail, getUserById } from "@/app/data/user"
 import { currentUser } from "@/lib/auth"
-import { generateVerificationToken } from "@/lib/tokens"
+import { generateVerificationToken } from "@/lib/token"
 import { sendVerificationEmail } from "@/lib/mail"
 
-import { unstable_update } from "@/auth"
-import { SettingsModel } from "@/app/model/auth-model"
-import { getUserByEmail, getUserById } from "@/app/data/user"
-
-export const settings = async (values: z.infer<typeof SettingsModel>) => {
+export const settings = async (values: z.infer<typeof SettingsSchema>) => {
    const user = await currentUser()
-   if (!user) return { error: "Unauthorized." }
 
-   const checkUser = await getUserById(user.id!)
-   if (!checkUser) return { error: "User not found." }
+   if (!user) {
+      return { error: "Unauthorized" }
+   }
 
-   // If user is using OAuth, we can't update password
+   const dbUser = await getUserById(user.id)
+
+   if (!dbUser) {
+      return { error: "Unauthorized" }
+   }
+
    if (user.isOAuth) {
       values.email = undefined
       values.password = undefined
@@ -28,32 +32,38 @@ export const settings = async (values: z.infer<typeof SettingsModel>) => {
    }
 
    if (values.email && values.email !== user.email) {
-      // Check if email is already in use
-      const checkUser = await getUserByEmail(values.email)
-      if (checkUser && checkUser.id !== user.id) return { error: "Email already in use." }
+      const existingUser = await getUserByEmail(values.email)
 
-      // Generate verification token and send email
+      if (existingUser && existingUser.id !== user.id) {
+         return { error: "Email already in use!" }
+      }
+
       const verificationToken = await generateVerificationToken(values.email)
       await sendVerificationEmail(verificationToken.email, verificationToken.token)
 
-      return { success: "Verification email sent." }
+      return { success: "Verification email sent!" }
    }
 
-   if (values.password && values.newPassword && checkUser.password) {
-      const matchPassword = await bcryptjs.compare(values.password, checkUser.password)
-      if (matchPassword) return { error: "Current password is incorrect." }
+   if (values.password && values.newPassword && dbUser.password) {
+      const passwordsMatch = await bcrypt.compare(values.password, dbUser.password)
 
-      const hashedPassword = await bcryptjs.hash(values.newPassword, 10)
+      if (!passwordsMatch) {
+         return { error: "Incorrect password!" }
+      }
+
+      const hashedPassword = await bcrypt.hash(values.newPassword, 10)
       values.password = hashedPassword
-      values.newPassword = undefined // Remove new password from values
+      values.newPassword = undefined
    }
 
-   const updatedUser = await prismaDB.user.update({
-      where: { id: checkUser.id },
-      data: { ...values },
+   const updatedUser = await db.user.update({
+      where: { id: dbUser.id },
+      data: {
+         ...values,
+      },
    })
 
-   unstable_update({
+   update({
       user: {
          name: updatedUser.name,
          email: updatedUser.email,
@@ -62,5 +72,5 @@ export const settings = async (values: z.infer<typeof SettingsModel>) => {
       },
    })
 
-   return { success: "Settings updated." }
+   return { success: "Settings Updated!" }
 }
