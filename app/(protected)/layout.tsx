@@ -1,10 +1,6 @@
-import { Navbar } from "@/app/(protected)/_components/navbar"
+import { Navbar } from "./_components/Navbar"
 
-type Props = {
-   children: React.ReactNode
-}
-
-export default function ProtectedLayout({ children }: Props) {
+export default function ProtectedPageLayout({ children }: { children: React.ReactNode }) {
    return (
       <div className="h-full w-full flex flex-col gap-y-10 items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-400 to-green-800">
          <Navbar />

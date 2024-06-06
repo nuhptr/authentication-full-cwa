@@ -7,9 +7,9 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { UserRole } from "@prisma/client"
 
-import { SettingsModel } from "@/model/auth-model"
-import { settings } from "@/actions/settings"
-import { useCurrentUser } from "@/hooks/use-current-user"
+import { SettingsModel } from "@/app/model/auth-model"
+import { settings } from "@/app/actions/settings"
+import { useCurrentUser } from "@/app/hooks/use-current-user"
 
 import { Switch } from "@/components/ui/switch"
 import {
@@ -19,8 +19,6 @@ import {
    SelectTrigger,
    SelectValue,
 } from "@/components/ui/select"
-import { Card, CardHeader, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import {
    Form,
    FormField,
@@ -30,9 +28,11 @@ import {
    FormMessage,
    FormDescription,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { FormSuccess } from "@/components/form-success"
-import { FormError } from "@/components/form-error"
+import { Card, CardHeader, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { FormSuccess } from "@/components/FormSuccess"
+import { FormError } from "@/components/FormError"
+import { FormFields } from "@/components/form/Form"
 
 export default function SettingsPage() {
    const user = useCurrentUser()
@@ -54,19 +54,19 @@ export default function SettingsPage() {
       },
    })
 
-   const onSubmit = (values: z.infer<typeof SettingsModel>) => {
+   const handleOnSubmit = async (data: z.infer<typeof SettingsModel>) => {
       startTransition(() => {
-         settings(values)
-            .then((data) => {
-               if (data?.error) setError(data.error)
+         settings(data)
+            .then((result) => {
+               if (result.error) setError(result.error)
 
-               if (data?.success) {
+               if (result.success) {
                   update()
-                  setSuccess(data.success)
+                  setSuccess(result.success)
                }
             })
             .catch(() => {
-               setError("Something went wrong, please try again later.")
+               setError("An error occurred while updating your settings. Please try again later.")
             })
       })
    }
@@ -74,84 +74,50 @@ export default function SettingsPage() {
    return (
       <Card className="w-[600px]">
          <CardHeader>
-            <p className="text-2xl font-semibold text-center">⚙︎ Settings</p>
+            <p className="text-2xl font-semibold text-center">** Settings</p>
          </CardHeader>
          <CardContent>
             <Form {...form}>
-               <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+               <form className="space-y-6" onSubmit={form.handleSubmit(handleOnSubmit)}>
                   <div className="space-y-4">
-                     <FormField
+                     <FormFields
                         control={form.control}
                         name="name"
-                        render={({ field }) => (
-                           <FormItem>
-                              <FormLabel>Name</FormLabel>
-                              <FormControl>
-                                 <Input {...field} placeholder="Jhon Doe" disabled={isPending} />
-                              </FormControl>
-                              <FormMessage />
-                           </FormItem>
-                        )}
+                        title="Name"
+                        placeholder="Jhon Doe"
+                        disabled={isPending}
                      />
-                     {/* If user using social media don't show this field */}
+
+                     {/* If user using social media account this field is hidden */}
                      {user?.isOAuth === false && (
                         <>
-                           <FormField
+                           <FormFields
                               control={form.control}
                               name="email"
-                              render={({ field }) => (
-                                 <FormItem>
-                                    <FormLabel>Email</FormLabel>
-                                    <FormControl>
-                                       <Input
-                                          {...field}
-                                          placeholder="jhondoe@gmail.com"
-                                          type="email"
-                                          disabled={isPending}
-                                       />
-                                    </FormControl>
-                                    <FormMessage />
-                                 </FormItem>
-                              )}
+                              title="Email"
+                              type="email"
+                              placeholder="jhondoe@gmail.com"
+                              disabled={isPending}
                            />
-                           <FormField
+                           <FormFields
                               control={form.control}
                               name="password"
-                              render={({ field }) => (
-                                 <FormItem>
-                                    <FormLabel>Password</FormLabel>
-                                    <FormControl>
-                                       <Input
-                                          {...field}
-                                          placeholder="********"
-                                          type="password"
-                                          disabled={isPending}
-                                       />
-                                    </FormControl>
-                                    <FormMessage />
-                                 </FormItem>
-                              )}
+                              title="Password"
+                              placeholder="*******"
+                              type="password"
+                              disabled={isPending}
                            />
-                           <FormField
+                           <FormFields
                               control={form.control}
                               name="newPassword"
-                              render={({ field }) => (
-                                 <FormItem>
-                                    <FormLabel>New Password</FormLabel>
-                                    <FormControl>
-                                       <Input
-                                          {...field}
-                                          placeholder="********"
-                                          type="password"
-                                          disabled={isPending}
-                                       />
-                                    </FormControl>
-                                    <FormMessage />
-                                 </FormItem>
-                              )}
+                              title="New Password"
+                              placeholder="*******"
+                              type="password"
+                              disabled={isPending}
                            />
                         </>
                      )}
+
                      <FormField
                         control={form.control}
                         name="role"
@@ -161,39 +127,42 @@ export default function SettingsPage() {
                               <Select
                                  disabled={isPending}
                                  onValueChange={field.onChange}
-                                 defaultValue={field.value}>
+                                 defaultValue={field.value}
+                              >
                                  <FormControl>
                                     <SelectTrigger>
-                                       <SelectValue placeholder="Select a role" />
+                                       <SelectValue placeholder="Select a Role" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                       <SelectItem value={UserRole.ADMIN}>Admin</SelectItem>
                                        <SelectItem value={UserRole.USER}>User</SelectItem>
+                                       <SelectItem value={UserRole.ADMIN}>Admin</SelectItem>
                                     </SelectContent>
                                  </FormControl>
                               </Select>
+
                               <FormMessage />
                            </FormItem>
                         )}
                      />
-                     {/* If user using social media don't show this field */}
+
+                     {/* If user using social media account hidden this field */}
                      {user?.isOAuth === false && (
                         <FormField
                            control={form.control}
                            name="isTwoFactorEnabled"
                            render={({ field }) => (
-                              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                              <FormItem className="flex flex-row items-center justify-between p-3 border rounded-lg shadow-sm">
                                  <div className="space-y-0.5">
                                     <FormLabel>Two Factor Authentication</FormLabel>
                                     <FormDescription>
-                                       Enable two factor authentication for your account.
+                                       Enable two-factor authentication for your account.
                                     </FormDescription>
                                  </div>
                                  <FormControl>
                                     <Switch
-                                       disabled={isPending}
                                        checked={field.value}
-                                       onCheckedChange={field.onChange}
+                                       onChange={field.onChange}
+                                       disabled={isPending}
                                     />
                                  </FormControl>
                               </FormItem>
@@ -204,7 +173,7 @@ export default function SettingsPage() {
 
                   <FormError message={error} />
                   <FormSuccess message={success} />
-                  <Button disabled={isPending} type="submit">
+                  <Button type="submit" disabled={isPending}>
                      Save
                   </Button>
                </form>

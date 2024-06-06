@@ -1,23 +1,17 @@
-import type { NextAuthConfig } from "next-auth"
-import credentials from "next-auth/providers/credentials"
 import bcryptjs from "bcryptjs"
 
-import github from "next-auth/providers/github"
+import type { NextAuthConfig } from "next-auth"
+import credentials from "next-auth/providers/credentials"
 import google from "next-auth/providers/google"
+import github from "next-auth/providers/github"
 
-import { LoginModel } from "@/model/auth-model"
-import { getUserByEmail } from "@/data/user"
+import { LoginModel } from "@/app/model/auth-model"
+import { getUserByEmail } from "@/app/data/user"
 
 export default {
    providers: [
-      google({
-         clientId: process.env.GOOGLE_CLIENT_ID,
-         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      }),
-      github({
-         clientId: process.env.GITHUB_CLIENT_ID,
-         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      }),
+      google,
+      github,
       credentials({
          async authorize(credentials) {
             const validateFields = LoginModel.safeParse(credentials)
@@ -28,8 +22,8 @@ export default {
                const user = await getUserByEmail(email)
                if (!user || !user.password) return null
 
-               const passwordMatch = await bcryptjs.compare(password, user.password)
-               if (passwordMatch) return user
+               const checkPassword = await bcryptjs.compare(password, user.password)
+               if (checkPassword) return user
             }
 
             return null

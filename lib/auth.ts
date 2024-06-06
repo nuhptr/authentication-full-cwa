@@ -1,13 +1,13 @@
 import { auth } from "@/auth"
 
-export async function currentUser() {
+// For server side rendering
+export const currentUser = async () => {
    const session = await auth()
-
    return session?.user
 }
 
-export async function currentRole() {
+// For server side rendering
+export const currentRole = async () => {
    const session = await auth()
-
    return session?.user?.role
 }

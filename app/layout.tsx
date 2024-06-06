@@ -10,19 +10,19 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-   title: "Complete Auth | Full Authentication Guide for Next.js",
-   description: "Learn how to add authentication to your Next.js app with this complete guide.",
+   title: "Next Auth v5 | Completed Auth Next.js",
+   description: "Learn how to add authentication to your Next.js app with Auth.js v5 beta",
+   authors: { name: "Adi Nugraha Putra", url: "https://kaizen-official-website.vercel.app/" },
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
    const session = await auth()
 
    return (
-      //? The `SessionProvider` is a wrapper that provides a session to all components in tree
       <SessionProvider session={session}>
          <html lang="en">
             <body className={inter.className}>
-               {/* to enable toast in app */}
+               {/* To enable toast in app */}
                <Toaster />
                {children}
             </body>
