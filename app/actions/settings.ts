@@ -3,26 +3,22 @@
 import * as z from "zod"
 import bcrypt from "bcryptjs"
 
-import { update } from "@/auth"
-import { db } from "@/lib/db"
-import { SettingsSchema } from "@/model"
 import { getUserByEmail, getUserById } from "@/app/data/user"
+import { SettingsSchema } from "@/app/model"
+
+import { unstable_update } from "@/auth"
+
+import { db } from "@/lib/db"
 import { currentUser } from "@/lib/auth"
 import { generateVerificationToken } from "@/lib/token"
 import { sendVerificationEmail } from "@/lib/mail"
 
 export const settings = async (values: z.infer<typeof SettingsSchema>) => {
    const user = await currentUser()
+   if (!user) return { error: "Unauthorized" }
 
-   if (!user) {
-      return { error: "Unauthorized" }
-   }
-
-   const dbUser = await getUserById(user.id)
-
-   if (!dbUser) {
-      return { error: "Unauthorized" }
-   }
+   const dbUser = await getUserById(user.id!)
+   if (!dbUser) return { error: "Unauthorized" }
 
    if (user.isOAuth) {
       values.email = undefined
@@ -46,10 +42,7 @@ export const settings = async (values: z.infer<typeof SettingsSchema>) => {
 
    if (values.password && values.newPassword && dbUser.password) {
       const passwordsMatch = await bcrypt.compare(values.password, dbUser.password)
-
-      if (!passwordsMatch) {
-         return { error: "Incorrect password!" }
-      }
+      if (!passwordsMatch) return { error: "Incorrect password!" }
 
       const hashedPassword = await bcrypt.hash(values.newPassword, 10)
       values.password = hashedPassword
@@ -58,12 +51,10 @@ export const settings = async (values: z.infer<typeof SettingsSchema>) => {
 
    const updatedUser = await db.user.update({
       where: { id: dbUser.id },
-      data: {
-         ...values,
-      },
+      data: { ...values },
    })
 
-   update({
+   unstable_update({
       user: {
          name: updatedUser.name,
          email: updatedUser.email,

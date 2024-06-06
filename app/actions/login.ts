@@ -4,15 +4,17 @@ import * as z from "zod"
 import bcrypt from "bcryptjs"
 import { AuthError } from "next-auth"
 
-import { db } from "@/lib/db"
-import { signIn } from "@/auth"
 import { LoginSchema } from "@/app/model"
 import { getUserByEmail } from "@/app/data/user"
 import { getTwoFactorTokenByEmail } from "@/app/data/two-factor-token"
-import { sendVerificationEmail, sendTwoFactorTokenEmail } from "@/lib/mail"
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
-import { generateVerificationToken, generateTwoFactorToken } from "@/lib/token"
 import { getTwoFactorConfirmationByUserId } from "@/app/data/two-factor-confirmation"
+
+import { signIn } from "@/auth"
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
+
+import { db } from "@/lib/db"
+import { sendVerificationEmail, sendTwoFactorTokenEmail } from "@/lib/mail"
+import { generateVerificationToken, generateTwoFactorToken } from "@/lib/token"
 
 export const login = async (values: z.infer<typeof LoginSchema>, callbackUrl?: string | null) => {
    const validatedFields = LoginSchema.safeParse(values)

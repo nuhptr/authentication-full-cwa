@@ -14,7 +14,7 @@ import {
    SelectTrigger,
    SelectValue,
 } from "@/components/ui/select"
-import { SettingsSchema } from "@/model"
+import { SettingsSchema } from "@/app/model"
 import { Card, CardHeader, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { settings } from "@/app/actions/settings"
@@ -33,7 +33,7 @@ import { FormError } from "@/components/form-error"
 import { FormSuccess } from "@/components/form-success"
 import { UserRole } from "@prisma/client"
 
-const SettingsPage = () => {
+export default function SettingsPage() {
    const user = useCurrentUser()
 
    const [error, setError] = useState<string | undefined>()
@@ -92,6 +92,7 @@ const SettingsPage = () => {
                            </FormItem>
                         )}
                      />
+
                      {user?.isOAuth === false && (
                         <>
                            <FormField
@@ -150,6 +151,7 @@ const SettingsPage = () => {
                            />
                         </>
                      )}
+
                      <FormField
                         control={form.control}
                         name="role"
@@ -175,6 +177,7 @@ const SettingsPage = () => {
                            </FormItem>
                         )}
                      />
+
                      {user?.isOAuth === false && (
                         <FormField
                            control={form.control}
@@ -199,6 +202,7 @@ const SettingsPage = () => {
                         />
                      )}
                   </div>
+
                   <FormError message={error} />
                   <FormSuccess message={success} />
                   <Button disabled={isPending} type="submit">
@@ -210,5 +214,3 @@ const SettingsPage = () => {
       </Card>
    )
 }
-
-export default SettingsPage

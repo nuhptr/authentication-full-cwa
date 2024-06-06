@@ -2,25 +2,20 @@
 
 import * as z from "zod"
 
-import { ResetSchema } from "@/model"
+import { ResetSchema } from "@/app/model"
 import { getUserByEmail } from "@/app/data/user"
+
 import { sendPasswordResetEmail } from "@/lib/mail"
 import { generatePasswordResetToken } from "@/lib/token"
 
 export const reset = async (values: z.infer<typeof ResetSchema>) => {
    const validateFields = ResetSchema.safeParse(values)
-
-   if (!validateFields.success) {
-      return { error: "Invalid email!" }
-   }
+   if (!validateFields.success) return { error: "Invalid email!" }
 
    const { email } = validateFields.data
 
    const existingUser = await getUserByEmail(email)
-
-   if (!existingUser) {
-      return { error: "Email not found!" }
-   }
+   if (!existingUser) return { error: "Email not found!" }
 
    const passwordResetToken = await generatePasswordResetToken(email)
    await sendPasswordResetEmail(passwordResetToken.email, passwordResetToken.token)

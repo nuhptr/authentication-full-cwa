@@ -3,7 +3,7 @@
 import { toast } from "sonner"
 import { UserRole } from "@prisma/client"
 
-import { admin } from "@/actions/admin"
+import { admin } from "@/app/actions/admin"
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"

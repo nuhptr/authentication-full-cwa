@@ -3,9 +3,10 @@
 import * as z from "zod"
 import bcrypt from "bcryptjs"
 
-import { NewPasswordSchema } from "@/model"
+import { NewPasswordSchema } from "@/app/model"
 import { getPasswordResetTokenByToken } from "@/app/data/password-reset-token"
 import { getUserByEmail } from "@/app/data/user"
+
 import { db } from "@/lib/db"
 
 export const newPassword = async (

@@ -2,9 +2,11 @@
 
 import * as z from "zod"
 import bcrypt from "bcryptjs"
-import { db } from "@/lib/db"
-import { RegisterSchema } from "@/model"
+
+import { RegisterSchema } from "@/app/model"
 import { getUserByEmail } from "@/app/data/user"
+
+import { db } from "@/lib/db"
 import { generateVerificationToken } from "@/lib/token"
 import { sendVerificationEmail } from "@/lib/mail"
 
